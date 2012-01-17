@@ -1,0 +1,15 @@
+# Ignore svn #
+.svn/
+
+# ignore project files #
+.classpath
+.project
+.settings/
+
+# ignore target files #
+target/
+
+# ignore log files #
+*.log
+
+CoreBridgeDB/org.bridgedb.webservice.cronos/src-axis
