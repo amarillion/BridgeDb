@@ -39,11 +39,31 @@ public final class SimpleGdbFactory
 	 * Opens a connection to the Gene Database located in the given file.
 	 * <p>
 	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
-	 * @param connectionString a JDBC Connection string 
+     * @param dbName Name of the Database
+	 * @param connectionString a JDBC Connection string. 
+     *    This assumes that no username or password is required.
 	 * @return a new Gdb
 	 * @throws IDMapperException on failure
 	*/
 	public static SimpleGdb createInstance(String dbName, String connectionString) throws IDMapperException
+	{
+        return createInstance(dbName, connectionString, null, null);
+    }
+    
+    /*
+	 * Opens a connection to the Gene Database located in the given file.
+	 * <p>
+	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
+     * @param dbName Name of the Database
+     * @param connectionString a JDBC Connection string 
+     * @param userName Userr name for the datapass
+     * @param passWord Password for this user on this database.
+	 * @return a new Gdb
+	 * @throws IDMapperException on failure
+     * @throws IDMapperException 
+     */
+	public static SimpleGdb createInstance(String dbName, String connectionString, String userName, String passWord) 
+            throws IDMapperException
 	{
 		if(connectionString == null) throw new NullPointerException();	
 
@@ -56,7 +76,13 @@ public final class SimpleGdbFactory
 		{
 			try 
 			{
-				con = DriverManager.getConnection(connectionString);
+                if (userName == null){
+                    con = DriverManager.getConnection(connectionString);
+                } else if (passWord == null){
+                    con = DriverManager.getConnection(connectionString, userName, "");
+                } else {
+                    con = DriverManager.getConnection(connectionString, userName, passWord);
+                }
 				stmt = con.createStatement();
 			} 
 			catch (SQLException e) 
@@ -83,9 +109,9 @@ public final class SimpleGdbFactory
 		switch (version)
 		{
 		case 2:
-			return new SimpleGdbImpl2(dbName, connectionString);
+			return new SimpleGdbImpl2(dbName, connectionString, userName, passWord);
 		case 3:
-			return new SimpleGdbImpl3(dbName, connectionString);
+			return new SimpleGdbImpl3(dbName, connectionString, userName, passWord);
 		//NB add future schema versions here
 		default:
 			throw new IDMapperException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +

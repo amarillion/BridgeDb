@@ -23,9 +23,10 @@ import org.bridgedb.impl.InternalUtils;
  */
 public abstract class SimpleGdbImplCommon extends SimpleGdb
 {
-	SimpleGdbImplCommon(String dbName, String connectionString) throws IDMapperException
+	SimpleGdbImplCommon(String dbName, String connectionString, String userName, String passWord) 
+            throws IDMapperException
 	{
-		super(dbName, connectionString);
+		super(dbName, connectionString, userName, passWord);
 		caps = new SimpleGdbCapabilities();
 	}
 
