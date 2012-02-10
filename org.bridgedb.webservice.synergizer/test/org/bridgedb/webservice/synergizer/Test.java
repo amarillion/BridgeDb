@@ -1,6 +1,7 @@
 // BridgeDb,
 // An abstraction layer for identifer mapping services, both local and online.
 // Copyright 2006-2009 BridgeDb developers
+//                2012 Egon Willighagen <egonw@users.sf.net>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,8 +18,6 @@
 
 package org.bridgedb.webservice.synergizer;
 
-import junit.framework.TestCase;
-
 import java.io.IOException;
 
 import java.util.HashSet;
@@ -30,17 +29,20 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.junit.Assert;
+import org.junit.Before;
 
-public class Test extends TestCase 
-{
+public class Test {
+
 	boolean eventReceived = false;
 	
-	public void setUp() throws ClassNotFoundException
+	@Before public void setUp() throws ClassNotFoundException
 	{
 		Class.forName ("org.bridgedb.webservice.synergizer.IDMapperSynergizer");
 	}
 
-        public void testSynergizerStub() throws IOException, IDMapperException {
+	@org.junit.Test
+	public void testSynergizerStub() throws IOException, IDMapperException {
             SynergizerStub client = SynergizerStub.getInstance();
             System.out.println(client.availableAuthorities());
             System.out.println(client.availableSpecies("ensembl"));
@@ -48,7 +50,8 @@ public class Test extends TestCase
             System.out.println(client.availableRanges("ensembl", "Homo sapiens", "hgnc_symbol"));
         }
 
-        public void testIDMapperSynergizer() throws IOException, IDMapperException {
+	@org.junit.Test
+    public void testIDMapperSynergizer() throws IOException, IDMapperException {
         	
             SynergizerStub client = SynergizerStub.getInstance();
             for (String auth : client.availableAuthorities()) {
@@ -75,14 +78,14 @@ public class Test extends TestCase
             try
             {
             	mapper.xrefExists(new Xref("snph", srcDs));
-            	fail ("Expected UnsupportedOperationException after calling xrefExists");
+            	Assert.fail ("Expected UnsupportedOperationException after calling xrefExists");
             }
             catch (UnsupportedOperationException ex)
             {
             	// ok.
             }
 
-            Set<Xref> srcXrefs = new HashSet();
+            Set<Xref> srcXrefs = new HashSet<Xref>();
             srcXrefs.add(new Xref("snph", srcDs));
             srcXrefs.add(new Xref("chac1", srcDs));
             srcXrefs.add(new Xref("actn3", srcDs));

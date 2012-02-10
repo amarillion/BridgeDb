@@ -1,6 +1,7 @@
 // BridgeDb,
 // An abstraction layer for identifer mapping services, both local and online.
 // Copyright 2006-2009 BridgeDb developers
+//                2012 Egon Willighagen <egonw@users.sf.net>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,22 +21,25 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.junit.Assert;
+import org.junit.Before;
 
-public class Test extends TestCase
-{
+
+public class Test {
+	
+	@Before
 	public void setUp() throws ClassNotFoundException
 	{
 		Class.forName ("org.bridgedb.webservice.picr.IDMapperPicr");
 	}
 	
+	@org.junit.Test
 	public void test() throws IDMapperException
 	{
 		IDMapper idmap = BridgeDb.connect ("idmapper-picr:");
@@ -46,9 +50,9 @@ public class Test extends TestCase
 		final DataSource SGD = DataSource.getByFullName("SGD");
 		final DataSource PDB  = DataSource.getByFullName("PDB");
 		final DataSource ENSEMBL_YEAST = DataSource.getByFullName("ENSEMBL_S_CEREVISIAE");
-		assertTrue (dslist.contains(SGD));
-		assertTrue (dslist.contains(PDB));
-		assertTrue (dslist.contains(ENSEMBL_YEAST));
+		Assert.assertTrue (dslist.contains(SGD));
+		Assert.assertTrue (dslist.contains(PDB));
+		Assert.assertTrue (dslist.contains(ENSEMBL_YEAST));
 		
 		Xref src1 = new Xref ("YER095W", ENSEMBL_YEAST);
 		for (DataSource ds : dslist) System.out.println (ds.getFullName());

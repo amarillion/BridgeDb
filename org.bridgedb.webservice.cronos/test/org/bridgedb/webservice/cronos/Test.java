@@ -1,6 +1,7 @@
 // BridgeDb,
 // An abstraction layer for identifer mapping services, both local and online.
 // Copyright 2006-2009 BridgeDb developers
+//                2012 Egon Willighagen <egonw@users.sf.net>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,8 +17,6 @@
 //
 package org.bridgedb.webservice.cronos;
 
-import java.io.File;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.bridgedb.BridgeDb;
@@ -25,18 +24,16 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
+import org.junit.Before;
 
-import junit.framework.TestCase;
-//import org.junit.Ignore;
-
-//@Ignore
-public class Test extends TestCase 
-{
-	@Override public void setUp() throws ClassNotFoundException
+public class Test {
+	
+	@Before public void setUp() throws ClassNotFoundException
 	{
 		Class.forName ("org.bridgedb.webservice.cronos.IDMapperCronos");
 	}
 	
+	@org.junit.Test
 	public void testSimple() throws IDMapperException
 	{
 		IDMapper mapper = BridgeDb.connect ("idmapper-cronos:hsa");
