@@ -41,9 +41,10 @@ class SimpleGdbImpl3 extends SimpleGdbImplCommon
 	 * 	or PROP_NONE if you want to connect read-only
 	 * @throws IDMapperException when the database could not be created or connected to
 	 */
-	public SimpleGdbImpl3(String dbName, String connectionString) throws IDMapperException
+	public SimpleGdbImpl3(String dbName, String connectionString, String userName, String passWord) 
+            throws IDMapperException
 	{
-		super(dbName, connectionString);
+		super(dbName, connectionString, userName, passWord);
 		checkSchemaVersion();
 	}
 	

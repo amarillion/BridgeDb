@@ -52,20 +52,29 @@ import org.bridgedb.IDMapperException;
  */
 public abstract class SimpleGdb extends IDMapperRdb
 {
-	private final String connectionString;
-	/**
+    private final String connectionString;
+    protected final String dbName;
+    private final String userName;
+    private final String passWord;
+    private boolean singleConnection = true;
+    private boolean neverCloseConnection = true;
+		
+    /**
 	 * Create IDMapper based on an existing SQL connection.
+     * @param dbName Name of the Database
 	 * @param con Existing SQL Connection.
+     * @param userName Userr name for the datapass
+     * @param passWord Password for this user on this database.
+
 	 */
-	SimpleGdb(String dbName, String connectionString)
+	SimpleGdb(String dbName, String connectionString, String userName, String passWord)
 	{
 		this.connectionString = connectionString;
 		this.dbName = dbName;
+		this.userName = userName;
+		this.passWord = passWord;
 	}
 
-	private boolean singleConnection = true;
-	private boolean neverCloseConnection = true;
-	
 	/**
 	 * helper class that handles the life cycle of a connection, query and resultset.
 	 * <p>
@@ -179,7 +188,13 @@ public abstract class SimpleGdb extends IDMapperRdb
 		// if singleConnection is false, each call to getConneciton() will lead to a new connection object being created.
 		if (!singleConnection || con == null)
 		{
-			con = DriverManager.getConnection(connectionString); 
+            if (userName == null){
+                con = DriverManager.getConnection(connectionString);
+            } else if (passWord == null){
+                con = DriverManager.getConnection(connectionString, userName, "");
+            } else {
+                con = DriverManager.getConnection(connectionString, userName, passWord);
+            }
 			con.setReadOnly(true);
 		}
 		return con;
@@ -197,8 +212,6 @@ public abstract class SimpleGdb extends IDMapperRdb
 		return true;
 	}
 
-	protected final String dbName;
-	
 	/** {@inheritDoc} */
 	@Override final public String getDbName() { return dbName; }
 	
